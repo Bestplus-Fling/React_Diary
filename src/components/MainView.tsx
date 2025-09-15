@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import "./MainView.css";
 
 interface MainViewProps {
@@ -5,10 +6,31 @@ interface MainViewProps {
 }
 
 function MainView({ setView }: MainViewProps) {
+
+  const now = new Date();
+  const date = now.getDate();
+  const month = now.getMonth() + 1;
+  const year = now.getFullYear();
+
+  const today = `${year}년 ${month}월 ${date}일`
+
+  const [questions, setQuestions] = useState<{ [ key: string ]: string }[]>([]);
+  useEffect(() => {
+    // Data fetching
+    fetch("/questions.json")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setQuestions(data);
+      })
+
+    // state로 데이터 저장
+  }, []);
+
   return (
     <>
       <div className="header">
-        <div>(오늘 날짜)</div>
+        <div>{ today }</div>
         <div>
           <button
             className="history-btn"
@@ -19,7 +41,7 @@ function MainView({ setView }: MainViewProps) {
           </button>
         </div>
       </div>
-      <div className="question">(질문)</div>
+      <div className="question">{ questions[date] }</div>
       <div className="content">
         <textarea
           onChange={() => {
