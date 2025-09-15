@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import "./MainView.css";
+import { useDiaryData } from "../utils";
 
 interface MainViewProps {
   setView: (view: "main" | "history") => void;
 }
 
-const diaryData = JSON.parse(window.localStorage.getItem("diary") || "{}");
+
 
 function MainView({ setView }: MainViewProps) {
 
@@ -14,6 +15,10 @@ function MainView({ setView }: MainViewProps) {
   const month = now.getMonth() + 1;
   const year = now.getFullYear();
   const today = `${year}년 ${month}월 ${date}일`
+
+  // const diaryData = useMemo(() => getDiaryData(), []);
+  // const diaryData = getDiaryData();
+  const diaryData = useDiaryData();
 
   const [questions, setQuestions] = useState<{ [ key: string ]: string }>({});
   // const [questions, setQuestions] = useState();
