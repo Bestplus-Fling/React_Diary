@@ -5,27 +5,35 @@ interface MainViewProps {
   setView: (view: "main" | "history") => void;
 }
 
+const diaryData = JSON.parse(window.localStorage.getItem("diary") || "{}");
+
 function MainView({ setView }: MainViewProps) {
 
   const now = new Date();
   const date = now.getDate();
   const month = now.getMonth() + 1;
   const year = now.getFullYear();
-
   const today = `${year}년 ${month}월 ${date}일`
 
-  const [questions, setQuestions] = useState<{ [ key: string ]: string }[]>([]);
+  const [questions, setQuestions] = useState<{ [ key: string ]: string }>({});
+  // const [questions, setQuestions] = useState();
+
+  const [input, setInput] = useState<string>(diaryData[today]);
+
   useEffect(() => {
     // Data fetching
     fetch("/questions.json")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setQuestions(data);
       })
 
     // state로 데이터 저장
   }, []);
+
+  if (!questions){
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -44,8 +52,15 @@ function MainView({ setView }: MainViewProps) {
       <div className="question">{ questions[date] }</div>
       <div className="content">
         <textarea
-          onChange={() => {
-            console.log("onChange");
+          value={input}
+          onChange={(e) => {
+            // console.log("onChange");
+            const value = e.target.value;
+            setInput(value);
+            window.localStorage.setItem(
+              "diary",
+              JSON.stringify({ ...diaryData, [today]: value || "" })
+            );
           }}
         />
       </div>

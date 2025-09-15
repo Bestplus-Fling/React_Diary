@@ -5,6 +5,11 @@ interface HistoryViewProps {
 }
 
 function HistoryView({setView} : HistoryViewProps) {
+
+  const diaryData = JSON.parse(window.localStorage.getItem("diary") || "{}");
+
+  const diaryEntries = Object.entries(diaryData) as [string, string][];
+
   return (
     <>
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -17,10 +22,14 @@ function HistoryView({setView} : HistoryViewProps) {
         </button>
         <h4>다이어리 기록</h4>
       </div>
-      <div className="diary-item">
-        <div className="diary-date">(날짜)</div>
-        <div>(내용)</div>
-      </div>
+      { diaryEntries.map((entry) => {
+        return (
+          <div className="diary-item" key={entry[0]}>
+            <div className="diary-date">{entry[0]}</div>
+            <div>{entry[1]}</div>
+          </div>
+        )
+      })}
     </>
   );
 }
