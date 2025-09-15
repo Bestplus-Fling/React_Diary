@@ -1,6 +1,10 @@
 import "./MainView.css";
 
-function MainView() {
+interface MainViewProps {
+  setView: (view: "main" | "history") => void;
+}
+
+function MainView({ setView }: MainViewProps) {
   return (
     <>
       <div className="header">
@@ -9,7 +13,7 @@ function MainView() {
           <button
             className="history-btn"
             onClick={() => {
-              // HistoryView 화면으로 전환
+              setView("history")
             }}>
             기록 보기
           </button>

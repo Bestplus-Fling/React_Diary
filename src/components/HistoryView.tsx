@@ -1,13 +1,17 @@
 import "./HistoryView.css";
 
-function HistoryView() {
+interface HistoryViewProps {
+  setView: (view: "main" | "history") => void;
+}
+
+function HistoryView({setView} : HistoryViewProps) {
   return (
     <>
       <div style={{ display: "flex", alignItems: "center" }}>
         <button
           className="back-btn"
           onClick={() => {
-            // MainView 화면으로 전환
+            setView("main");
           }}>
           &lt;
         </button>
